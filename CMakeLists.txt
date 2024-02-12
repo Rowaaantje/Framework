@@ -17,6 +17,7 @@ add_executable(${PROJECT_NAME}
 	src/entity.cpp
 	src/myscene.cpp
 	src/player.cpp
+	src/cameraF.cpp
 	src/block.cpp
 )
 target_link_libraries(${PROJECT_NAME} PRIVATE raylib)

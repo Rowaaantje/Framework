@@ -4,6 +4,7 @@ Player::Player() : Entity(), player({ position.x, position.y, scale.x, scale.y }
 {
     //constructor
     // Rectangle player = { position.x, position.y, scale.x, scale.y };
+
 }   
 
 Player::~Player() 
@@ -13,8 +14,10 @@ Player::~Player()
 
 void Player::update(float deltaTime) 
 {
-    DrawRectangleRec(player, RED); 
+    DrawRectangleRec(player, BLUE); 
     
+    // playerCam->position = this->position;
+
     player.x = position.x;
     player.y = position.y;
     player.width = scale.x;

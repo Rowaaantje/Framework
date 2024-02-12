@@ -4,6 +4,7 @@ MyScene::MyScene()
 {
     //constructor
     player = new Player();
+    playerCam = new CameraF();
     block = new Block();
 
     block->position = Vector2{600, 100};
@@ -14,6 +15,7 @@ MyScene::~MyScene()
 {
 	// deconstruct and delete the Tree
     delete player;
+    delete playerCam;
     delete block;
 }
 
@@ -22,6 +24,11 @@ void MyScene::update(float deltaTime)
     player->update(deltaTime);
     block->update(deltaTime);
     Movement(deltaTime);
+
+    playerCam->offset = Vector2{300, 300};
+    playerCam->target = player->position;
+    playerCam->zoom = 1.0f;
+
 
     if (collision(player, block))
 	{   
@@ -65,11 +72,14 @@ void MyScene::Movement(float deltaTime)
 }
 
 bool MyScene::collision(Entity *collisionA, Entity *collisionB) {
-    // Check for horizontal collision %% vertical
-    return (collisionA->position.x < collisionB->position.x * collisionB->width  + 2&& 
-            collisionA->position.x + collisionA->width > collisionB->position.x  + 2&&
-            collisionA->position.y < collisionB->position.y * collisionB->height + 2&&
-            collisionA->position.y + collisionA->height > collisionB->position.y);
+    // Check for horizontal collision
+    bool collisionX = collisionA->position.x < collisionB->position.x + collisionB->width &&
+                       collisionA->position.x + collisionA->width > collisionB->position.x;
+    // Check for vertical collision
+    bool collisionY = collisionA->position.y < collisionB->position.y + collisionB->height &&
+                       collisionA->position.y + collisionA->height > collisionB->position.y;
+    // Return true if there is a collision on both axes
+    return collisionX && collisionY;
 }
 //             return (playerA->position.x < playerB->position.x + playerB->sprite()->size.x * playerB->scale.x &&
 // 			playerA->position.x + playerA->sprite()->size.x * playerA->scale.x > playerB->position.x &&

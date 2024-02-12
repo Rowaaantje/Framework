@@ -8,6 +8,7 @@
 
 #include "raylib.h"
 #include "player.h"
+#include "cameraF.h"
 #include "block.h"
 
 ///Class Definition: Your MyScene class inherits from a Scene
@@ -23,6 +24,7 @@ public:
 	
 private:
 	Player* player;
+	CameraF* playerCam;
 	Block* block;
 
 };
