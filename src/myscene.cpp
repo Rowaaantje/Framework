@@ -1,10 +1,12 @@
 #include "myscene.h"
 
 MyScene::MyScene() 
-{
+{   
+
+    
     //constructor
     player = new Player();
-    playerCam = new CameraF();
+    // playerCam = new CameraF();
     block = new Block();
 
     block->position = Vector2{600, 100};
@@ -15,20 +17,19 @@ MyScene::~MyScene()
 {
 	// deconstruct and delete the Tree
     delete player;
-    delete playerCam;
+    // delete playerCam;
     delete block;
 }
 
 void MyScene::update(float deltaTime) 
 {   
+    // player->draw(0);
     player->update(deltaTime);
     block->update(deltaTime);
     Movement(deltaTime);
 
-    playerCam->offset = Vector2{300, 300};
-    playerCam->target = player->position;
-    playerCam->zoom = 1.0f;
-
+    //playerCam
+    // Zoom(deltaTime);
 
     if (collision(player, block))
 	{   
@@ -62,13 +63,13 @@ void MyScene::Movement(float deltaTime)
     }
 #endif /* Movement */
 
-#ifndef Block
+// #ifndef Block
 
-     if (IsKeyDown(KEY_DOWN)) block->position.y += 3.0f;
-    else if (IsKeyDown(KEY_UP)) block->position.y -= 3.0f;
-    if (IsKeyDown(KEY_RIGHT)) block->position.x += 3.0f;
-    else if (IsKeyDown(KEY_LEFT)) block->position.x -= 3.0f;
-#endif /* Movement */
+//      if (IsKeyDown(KEY_DOWN)) block->position.y += 3.0f;
+//     else if (IsKeyDown(KEY_UP)) block->position.y -= 3.0f;
+//     if (IsKeyDown(KEY_RIGHT)) block->position.x += 3.0f;
+//     else if (IsKeyDown(KEY_LEFT)) block->position.x -= 3.0f;
+// #endif /* Movement */
 }
 
 bool MyScene::collision(Entity *collisionA, Entity *collisionB) {
@@ -87,18 +88,10 @@ bool MyScene::collision(Entity *collisionA, Entity *collisionB) {
 // 			playerA->position.y + playerA->sprite()->size.y * playerA->scale.y > playerB->position.y);
 // }
 
-// bool AreColliding(Entity* collisionA, Entity* collisionB) {
-//     // Check for horizontal collision
-//     if (collisionA->position.x < collisionB->position.x + collisionB->width &&
-//         collisionA->position.x + collisionA->width > collisionB->position.x) {
-//         // Check for vertical collision
-//         if (collisionA->position.y < collisionB->position.y + collisionB->height &&
-//             collisionA->position.y  + collisionA->height > collisionB->position.y) {
-//             // Both conditions met, objects are colliding
-//             std::cout<<"colo" << std::endl;
-//             return true;
-//         }
+// void MyScene::Zoom(float deltaTime)
+// {
+//     if (GetMouseWheelMove())
+//     {
+//         playerCam->zoom += ((float)GetMouseWheelMove()*0.05f);
 //     }
-//     // If neither condition was met, objects are not colliding
-//     return false;
 // }

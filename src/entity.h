@@ -1,6 +1,7 @@
 #ifndef Entity_H
 #define Entity_H
 
+#include "config.h"
 #include <iostream>
 #include "raylib.h"
 

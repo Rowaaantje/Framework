@@ -1,5 +1,5 @@
-#ifndef Player_H
-#define Player_H
+#ifndef PLAYER_H
+#define PLAYER_H
 
 #include "entity.h"
 #include <iostream>
@@ -17,6 +17,8 @@ public:
 	Vector2 newScaleX {0.0, 0.0}; // updating to newScaleX
 	Vector2 newScaleY {0.0, 0.0}; // updating to newScaleY
 
+	Camera2D camera = { 0 };
+	void draw(float deltaTime);
 
 	Rectangle player;
 	
@@ -24,4 +26,4 @@ private:
 
 };
 
-#endif /* Player_H */
+#endif /* PLAYER_H */

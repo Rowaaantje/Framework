@@ -1,6 +1,7 @@
 #ifndef MYSCENE_H
 #define MYSCENE_H
 
+#include "config.h"
 
 #include <fstream>
 #include <sstream>
@@ -21,10 +22,11 @@ public:
 	virtual void update(float deltaTime);
 	void Movement(float deltaTime);
 	bool collision(Entity* collisionA, Entity* collisionB);
-	
+	void Zoom(float deltaTime);
+
+
 private:
 	Player* player;
-	CameraF* playerCam;
 	Block* block;
 
 };
