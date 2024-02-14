@@ -20,6 +20,7 @@ public:
 	Camera2D camera = { 0 };
 	void draw(float deltaTime);
 
+protected:
 	Rectangle player;
 	
 private:

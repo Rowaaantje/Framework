@@ -1,23 +1,21 @@
 #include "myscene.h"
 
-MyScene::MyScene() 
+MyScene::MyScene(uint16_t width, uint16_t height, const char* windowName) 
+    : Scene(width, height, windowName)
 {   
-
-    
-    //constructor
     player = new Player();
-    // playerCam = new CameraF();
     block = new Block();
 
     block->position = Vector2{600, 100};
     player->position = Vector2{100, 100};
+
+    addEntity(player);
+    addEntity(block);
 }   
 
 MyScene::~MyScene() 
 {
-	// deconstruct and delete the Tree
     delete player;
-    // delete playerCam;
     delete block;
 }
 
