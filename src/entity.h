@@ -15,17 +15,23 @@ public:
 
 	/// @brief Update the entity.
 	virtual void update(float deltaTime);
-	// Pure virtual method to be implemented by derived classes
+
+	void draw(float deltaTime);
 
 	float width; // Rectangle width
-    float height;// Rectangle height
+    float height; // Rectangle height
 
-	Vector2 position {0.0f, 0.0f};
-	Vector2 rotation {0.0f, 0.0f};
-	Vector3 scale {1.0f, 1.0f, 0.0f};
+	Vector2 position;
+	Vector2 rotation;
+	Vector3 scale;
+
+	
+
+    /// @brief Removes an entity from the scene
+	/// @return void
+    void removeEntity(Entity* entity);
 
 private:
-
 };
 
 #endif /* Entity_H */

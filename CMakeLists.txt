@@ -14,8 +14,9 @@ add_subdirectory(libs/raylib)
 
 add_executable(${PROJECT_NAME}
 	src/main.cpp
-	src/entity.cpp
+	src/core.cpp
 	src/scene.cpp
+	src/entity.cpp
 	src/myscene.cpp
 	src/player.cpp
 	src/block.cpp

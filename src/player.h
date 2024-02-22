@@ -13,7 +13,7 @@ public:
 	virtual ~Player();
 	virtual void update(float deltaTime);
 	
-	Vector3 scale {100, 100, 0};
+	Vector3 scale {50, 50, 0};
 	Vector2 newScaleX {0.0, 0.0}; // updating to newScaleX
 	Vector2 newScaleY {0.0, 0.0}; // updating to newScaleY
 

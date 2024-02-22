@@ -1,7 +1,6 @@
 #ifndef MYSCENE_H
 #define MYSCENE_H
 
-#include "config.h"
 #include "raylib.h"
 
 #include <fstream>
@@ -11,7 +10,6 @@
 #include "scene.h"
 #include "player.h"
 #include "block.h"
-
 
 ///Class Definition: Your MyScene class inherits from a Scene
 /// @brief The MyScene class is the Scene implementation.
