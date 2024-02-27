@@ -18,16 +18,14 @@ class Scene : public Entity
 	/// @brief Deconstructor of a scene
 	~Scene();
 
-	/// @brief Updates the scene for a given frame time
-	// @brief Update the scene. This function is PURE VIRTUAL. You MUST implement it when extending from Scene.
-	/// @return void
-	virtual void update(float deltaTime) = 0;
-
     /// @brief draw the scene
 	/// @return void
 	void draw(float deltaTime);
 
-	void run(float deltaTime);
+	/// @brief update this Scene
+	/// @param deltaTime the number of seconds since the last update
+	/// @return void
+	virtual void updateScene(float deltaTime);
 
 	/// @brief Wether the scene is active or not
 	bool isActive() { return !WindowShouldClose(); };
@@ -45,7 +43,7 @@ class Scene : public Entity
 private:
 	/// @brief draw each entity from the list entities
 	/// @return void
-	void updateEntity(Entity* entity, float deltaTime);
+	void updateEntity(float deltaTime);
 
 	std::vector<Entity*> entities;
 };

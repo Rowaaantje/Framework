@@ -3,20 +3,21 @@
 
 
 #include "entity.h"
-///Class Definition: Your Player class inherits from a Scene
-/// @brief The Player class is the Scene implementation.
+///Class Definition: Your Block class inherits from a Entity
 class Block : public Entity 
 {
 public:
 	Block();
 	virtual ~Block();
 	virtual void update(float deltaTime);
+	void draw(float deltaTime);
 
 	Vector3 scale {100, 100, 0};
 	
-private:
-	Rectangle block; 
+protected:
+	Rectangle block;
 
+private:
 };
 
 #endif /* BLOCK_H */

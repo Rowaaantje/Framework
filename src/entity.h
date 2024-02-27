@@ -18,18 +18,16 @@ public:
 
 	void draw(float deltaTime);
 
+	/// @brief Removes an entity from the scene
+	/// @return void
+    void removeEntity(Entity* entity);
+
 	float width; // Rectangle width
     float height; // Rectangle height
 
-	Vector2 position;
-	Vector2 rotation;
-	Vector3 scale;
-
-	
-
-    /// @brief Removes an entity from the scene
-	/// @return void
-    void removeEntity(Entity* entity);
+    Vector3 position;
+    Vector3 rotation;
+    Vector3 scale;
 
 private:
 };

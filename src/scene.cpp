@@ -13,16 +13,11 @@ Scene::~Scene()
     CloseWindow();
 }
 
-void Scene::update(float deltaTime)
-{
-    
-}
-
-void Scene::run(float deltaTime)
+void Scene::updateScene(float deltaTime)
 {
     BeginDrawing();
 
-        update(deltaTime);
+        updateEntity(deltaTime);
         draw(deltaTime);
         
     EndDrawing();
@@ -32,7 +27,10 @@ void Scene::draw(float deltaTime)
 {
     // Clear the background
     ClearBackground(GREEN);
-    updateEntity(this, deltaTime);
+    // updateEntity(this, deltaTime);
+    for (Entity* entity : entities) {
+        entity->draw(deltaTime);
+    }
     DrawFPS(25, 25);
 }
 
@@ -41,12 +39,10 @@ void Scene::addEntity(Entity* entity)
     entities.push_back(entity);
 }
 
-void Scene::updateEntity(Entity* entity, float deltaTime) 
+void Scene::updateEntity(float deltaTime)  
 {
-    entity->update(deltaTime);
-
-    //update() all childeren 
-    // for (Entity* entity : entities) {
-    //     entity->draw(deltaTime);
-    // }
+    // update() all childeren 
+    for (Entity* entity : entities) {
+        entity->update(deltaTime);
+    }
 }

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.5)
 project(main C CXX)
 
 set(CMAKE_CXX_STANDARD 11)
@@ -21,11 +21,9 @@ add_executable(${PROJECT_NAME}
 	src/player.cpp
 	src/block.cpp
 )
+
 target_link_libraries(${PROJECT_NAME} PRIVATE raylib)
 file(
 	COPY assets
 	DESTINATION ${CMAKE_BINARY_DIR}
 )
-
-# target_compile_definitions(${PROJECT_NAME} PUBLIC ASSETS_PATH="${CMAKE_CURRENT_SOURCE_DIR}/assets/") # Set the asset path macro to the absolute path on the dev machine
-#target_compile_definitions(${PROJECT_NAME} PUBLIC ASSETS_PATH="relative-path-to-assets-in-the-game-package") # Set the asset path macro in release more

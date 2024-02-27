@@ -1,15 +1,17 @@
+#include "core.h"
 #include "myscene.h"
 
 int main(void)
 {
-    MyScene* myscene = new MyScene(SCREEN_WIDTH, SCREEN_HEIGHT, WINDOWNAME);
-    // SetTargetFPS(120);
+    Core* core = new Core();
 
+    MyScene* myscene = new MyScene(SCREEN_WIDTH, SCREEN_HEIGHT, WINDOWNAME);
+    
     SetWindowState(FLAG_VSYNC_HINT);
    
         while (myscene->isActive())
         {
-            myscene->run(0);
+            core->run(myscene);
         }
 
     // Free dynamically allocated memory

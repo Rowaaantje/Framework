@@ -6,8 +6,8 @@ MyScene::MyScene(uint16_t width, uint16_t height, const char* windowName)
     player = new Player();
     block = new Block();
 
-    block->position = Vector2{600, 100};
-    player->position = Vector2{width / 2.0f, height / 2.0f};
+    block->position = Vector3{600, 100};
+    player->position = Vector3{width / 2.0f, height / 2.0f};
 
     addEntity(player);
     addEntity(block);
@@ -22,44 +22,9 @@ MyScene::~MyScene()
 void MyScene::update(float deltaTime) 
 {   
     // player->draw(0);
-    player->update(deltaTime); //draw player *TEMP
-    block->update(deltaTime); //draw player *TEMP
-    Movement(deltaTime);
-}
-
-void MyScene::Movement(float deltaTime)
-{
-#ifndef Player
-
-    if (IsKeyDown(KEY_S)) player->position.y += 3.0f;
-    else if (IsKeyDown(KEY_W)) player->position.y -= 3.0f;
-    if (IsKeyDown(KEY_D)) player->position.x += 3.0f;
-    else if (IsKeyDown(KEY_A)) player->position.x -= 3.0f;
-
-    if (IsKeyDown(KEY_Q)) 
-    {
-        player->scale.x -= 1;
-        std::cout << "scale x " << player->scale.x <<  std::endl;
-    }
-    else if (IsKeyDown(KEY_E)) 
-    {
-        player->scale.y -= 1;
-        std::cout << "scale y " << player->scale.y <<  std::endl;
-    }
-    else
-    {
-        player->scale.y =  100;
-        player->scale.x =  100;
-    }
-#endif /* Movement */
-
-// #ifndef Block
-
-//      if (IsKeyDown(KEY_DOWN)) block->position.y += 3.0f;
-//     else if (IsKeyDown(KEY_UP)) block->position.y -= 3.0f;
-//     if (IsKeyDown(KEY_RIGHT)) block->position.x += 3.0f;
-//     else if (IsKeyDown(KEY_LEFT)) block->position.x -= 3.0f;
-// #endif /* Movement */
+    // player->update(deltaTime); //draw player *TEMP
+    // block->update(deltaTime); //draw player *TEMP
+    // Movement(deltaTime);
 }
 
 // bool MyScene::collision(Entity *collisionA, Entity *collisionB) {

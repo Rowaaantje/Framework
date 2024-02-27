@@ -19,7 +19,6 @@ public:
 	MyScene(uint16_t width, uint16_t height, const char* windowName);
 	virtual ~MyScene();
 	virtual void update(float deltaTime);
-	void Movement(float deltaTime);
 	bool collision(Entity* collisionA, Entity* collisionB);
 	void Zoom(float deltaTime);
 
