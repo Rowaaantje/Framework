@@ -6,4 +6,5 @@ bin/
 build/
 out/
 doc/
+libs/
 CMakeSettings.json
