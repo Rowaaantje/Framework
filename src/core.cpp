@@ -1,6 +1,4 @@
-// core.cpp
-
-#include "core.h"
+#include <core.h>
 
 Core::Core()
 {
@@ -16,15 +14,12 @@ void Core::run(Scene* scene)
 {
 	_calculateDeltaTime();
 
-	scene->updateScene((float)_deltaTime);
+	scene->updateScene(_deltaTime);
 }
 
-double Core::_calculateDeltaTime()
+float Core::_calculateDeltaTime()
 {
-	static double lastTime = GetTime();
-	double startTime = GetTime();
-	_deltaTime = startTime - lastTime;
-	lastTime = startTime;
+	_deltaTime = GetFrameTime();
 
 	return _deltaTime;
 }

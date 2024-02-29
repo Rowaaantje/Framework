@@ -12,18 +12,16 @@ set(BUILD_GAMES    OFF CACHE BOOL "" FORCE) # or games
 
 add_subdirectory(libs/raylib)
 
-add_executable(${PROJECT_NAME}
-	src/main.cpp
-	src/core.cpp
-	src/scene.cpp
-	src/entity.cpp
-	src/myscene.cpp
-	src/player.cpp
-	src/block.cpp
-)
+# Define WORKING_DIRECTORY to the directory containing your headers
+set(WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
+
+# Get all .cpp files from the source folder
+file(GLOB SOURCES "src/*.cpp")
+
+# Now we add all the source files to the project
+add_executable(${PROJECT_NAME} ${SOURCES})
+
+target_include_directories(${PROJECT_NAME} PUBLIC ${WORKING_DIRECTORY}/headers)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE raylib)
-file(
-	COPY assets
-	DESTINATION ${CMAKE_BINARY_DIR}
-)
+file(COPY assets/ DESTINATION ${CMAKE_BINARY_DIR})

@@ -1,4 +1,4 @@
-#include "scene.h"
+#include <scene.h>
 
 Scene::Scene(uint16_t width, uint16_t height, const char* windowName) : Entity() 
 {
@@ -32,11 +32,6 @@ void Scene::draw(float deltaTime)
         entity->draw(deltaTime);
     }
     DrawFPS(25, 25);
-}
-
-void Scene::addEntity(Entity* entity)
-{
-    entities.push_back(entity);
 }
 
 void Scene::updateEntity(float deltaTime)  

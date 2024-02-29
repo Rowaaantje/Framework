@@ -30,22 +30,15 @@ class Scene : public Entity
 	/// @brief Wether the scene is active or not
 	bool isActive() { return !WindowShouldClose(); };
 
-	/// @brief Adds an entity to the scene
-	/// @return void
-    void addEntity(Entity* entity);
-
 	/// @brief Gets a pointer to the Camera2D
     /// @return Camera2D* a pointer to the Camera2D
     Camera2D* getCamera() const;
-
-// protected:
 
 private:
 	/// @brief draw each entity from the list entities
 	/// @return void
 	void updateEntity(float deltaTime);
 
-	std::vector<Entity*> entities;
 };
 
 #endif /* SCENE_H */

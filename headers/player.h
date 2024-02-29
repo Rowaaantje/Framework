@@ -1,7 +1,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "entity.h"
+#include <entity.h>
 #include <iostream>
 
 ///Class Definition: Your Player class inherits from a Entity 
@@ -12,7 +12,8 @@ public:
 	virtual ~Player();
 	virtual void update(float deltaTime);
 
-	Vector2 velocity;
+	Vector3 velocity;
+	double _Sqrt2 = sqrt(2);
 
 	bool isMoving;
     float momentum;
@@ -27,10 +28,12 @@ public:
 	void Move(float deltaTime);
 	float lerp(float start, float end, float factor);
 	void synchronizeWithEntity();
-	void handleplayer(float deltatime);
+	void clamp();
 
 protected:
 	Rectangle player;
+	Texture2D playerTexture;
+	Image player3;
 	
 private:
 

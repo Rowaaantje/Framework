@@ -1,4 +1,4 @@
-#include "myscene.h"
+#include <myscene.h>
 
 MyScene::MyScene(uint16_t width, uint16_t height, const char* windowName) 
     : Scene(width, height, windowName)

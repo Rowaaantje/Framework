@@ -1,4 +1,4 @@
-#include "player.h"
+#include <player.h>
 
 Player::Player() : Entity()
 // , player({ position.x, position.y, scale.x, scale.y })
@@ -14,6 +14,18 @@ Player::Player() : Entity()
 	walkSpeed = 2.0f;
     momentum = 0.0f;
 
+    player3 = LoadImage("assets/player1.png");
+    playerTexture = LoadTextureFromImage(player3);
+    UnloadImage(player3);
+
+    if(playerTexture.id == 0){
+        // std::cout <<"Failed load texture"<< std::endl;
+        perror("Failed load texture");
+    }
+    else {
+        std::cout <<"succes with loading texture"<< std::endl;
+    }
+    
     // Rectangle player = { position.x, position.y, scale.x, scale.y };
     // camera.target = Vector2{ this->position.x , this->position.y  };
     // camera.offset = Vector2{SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f };
@@ -24,11 +36,14 @@ Player::Player() : Entity()
 Player::~Player() 
 {
 	// deconstruct and delete the Tree
+    UnloadTexture(playerTexture);
 }
 
 void Player::draw(float deltaTime) 
 {
-    DrawRectangleRec(player, BLUE); 
+    DrawRectangleRec(player, SEMI_TRANSPARENT_BLACK); 
+    DrawTexture(playerTexture, player.x, player.y, WHITE);
+
 }
 
 void Player::synchronizeWithEntity()
@@ -41,11 +56,10 @@ void Player::synchronizeWithEntity()
 
 void Player::update(float deltaTime) 
 {
-
-    synchronizeWithEntity();
-
     Move(deltaTime);
-
+    synchronizeWithEntity();
+    clamp();
+    std::cout << "x = " << this->position.x <<  " y = " << this->position.y << std::endl;
     draw(deltaTime);
 }
 // simple linear interpolation function
@@ -59,7 +73,6 @@ void Player::adjustPosition(float deltaTime, int switchInt)
     float transitionFactor =  0.1f;
     
     // Gradually increase momentum towards sprintSpeed  else Gradually decrease momentum towards walkSpeed
-    //
     momentum = IsKeyDown(KEY_LEFT_CONTROL) ? this->lerp(momentum, sprintSpeed, transitionFactor) : this->lerp(momentum, walkSpeed, transitionFactor);
 
     // // Check if Ctrl key is pressed to determine the momentum
@@ -92,7 +105,25 @@ void Player::Move(float deltaTime)
     if (IsKeyDown(KEY_A)) this->adjustPosition(deltaTime, 3);
     else if (IsKeyDown(KEY_D)) this->adjustPosition(deltaTime, 4);
 
-	std::cout << "speed " << momentum << std::endl;
+	// std::cout << "speed " << momentum << std::endl;
+}
 
-    // std::cout << "x = " << this->position.x <<  " y = " << this->position.y << std::endl;
+void Player::clamp()
+{
+  if ( this->position.x < 0)
+  {
+    this->position.x = 0;
+  }
+  if ( this->position.y < 0)
+  {
+    this->position.y = 0;
+  }
+  if ( this->position.x + this->scale.x > SCREEN_WIDTH)
+  {
+    this->position.x = SCREEN_WIDTH - this->scale.x;
+  }
+   if ( this->position.y + this->scale.y > SCREEN_WIDTH)
+  {
+    this->position.y = SCREEN_WIDTH - this->scale.y;
+  }
 }

@@ -15,11 +15,11 @@ public:
 	/// @brief get deltaTime
 	/// double internally, cast to float. glm and OpenGL expect floats.
 	/// @return float deltaTime
-	float deltaTime() { return (float)_deltaTime; };
+	// float deltaTime() { return (float)_deltaTime; };
 
 private:
-	double _calculateDeltaTime();
-	double _deltaTime; ///< @brief deltaTime member
+	float _calculateDeltaTime();
+	float _deltaTime; ///< @brief deltaTime member
 
 };
 

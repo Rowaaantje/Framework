@@ -1,4 +1,4 @@
-#include "entity.h"
+#include <entity.h>
 
 Entity::Entity() 
 {
@@ -20,6 +20,10 @@ void Entity::update(float deltaTime)
 void Entity::draw(float deltaTime)
 {
 
+}
+void Entity::addEntity(Entity* entity)
+{
+    entities.push_back(entity);
 }
 
 void Entity::removeEntity(Entity* entity)

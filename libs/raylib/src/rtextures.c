@@ -4100,7 +4100,7 @@ void SetTextureWrap(Texture2D texture, int wrap)
 // Texture drawing functions
 //------------------------------------------------------------------------------------
 // Draw a texture
-void DrawTexture(Texture2D texture, int posX, int posY, Color tint)
+void DrawTexture(Texture2D texture, float posX, float posY, Color tint) 
 {
     DrawTextureEx(texture, (Vector2){ (float)posX, (float)posY }, 0.0f, 1.0f, tint);
 }
