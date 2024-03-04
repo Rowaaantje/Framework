@@ -12,9 +12,10 @@ Core::~Core()
 
 void Core::run(Scene* scene)
 {
+	// update our _deltaTime
 	_calculateDeltaTime();
 
-	scene->updateScene(_deltaTime);
+	scene->tick(_deltaTime);
 }
 
 float Core::_calculateDeltaTime()

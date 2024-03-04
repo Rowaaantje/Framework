@@ -16,4 +16,6 @@ int main(void)
 
     // Free dynamically allocated memory
     delete myscene;
+
+    return 0;
 }

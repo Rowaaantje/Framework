@@ -1,48 +1,97 @@
 #include <myscene.h>
 
+// #include <rshapes.c> //rember
+
 MyScene::MyScene(uint16_t width, uint16_t height, const char* windowName) 
     : Scene(width, height, windowName)
 {   
     player = new Player();
+    enemy = new Enemy();
     block = new Block();
+    coli = new Block();
 
-    block->position = Vector3{600, 100};
-    player->position = Vector3{width / 2.0f, height / 2.0f};
 
-    addEntity(player);
-    addEntity(block);
+    // block->position = Vector3{600, 100};
+    // player->position = Vector3{width / 2.0f, height / 2.0f};
+    addChild(player);
+    addChild(enemy);
+    addChild(block);
+    addChild(coli);
 }   
 
 MyScene::~MyScene() 
 {
-    removeEntity(player);
-    removeEntity(block);
+    removeChild(player);
+    removeChild(enemy);
+    removeChild(block);
+    removeChild(coli);
 }
 
 void MyScene::update(float deltaTime) 
 {   
-    // player->draw(0);
-    // player->update(deltaTime); //draw player *TEMP
-    // block->update(deltaTime); //draw player *TEMP
-    // Movement(deltaTime);
+    rotate(player, block, deltaTime);
+
+    if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
+        angle += 10.0f;
+    }
+    player->drawImageSize(SEMI_TRANSPARENT_BLACK, deltaTime);
+
+    // Check for collision and handle it
+    if (collision(player, block)) {
+        std::cout << "Colliding " << std::endl;
+    } 
+
+    if (collision(block, coli)) {
+        // std::cout << "coli " << std::endl;
+        coli->setTextureColor(BLACK);
+    } 
+        
 }
 
-// bool MyScene::collision(Entity *collisionA, Entity *collisionB) {
-//     // Check for horizontal collision
-//     bool collisionX = collisionA->position.x < collisionB->position.x + collisionB->width &&
-//                        collisionA->position.x + collisionA->width > collisionB->position.x;
-//     // Check for vertical collision
-//     bool collisionY = collisionA->position.y < collisionB->position.y + collisionB->height &&
-//                        collisionA->position.y + collisionA->height > collisionB->position.y;
-//     // Return true if there is a collision on both axes
-//     return collisionX && collisionY;
-// }
-//             return (playerA->position.x < playerB->position.x + playerB->sprite()->size.x * playerB->scale.x &&
-// 			playerA->position.x + playerA->sprite()->size.x * playerA->scale.x > playerB->position.x &&
-// 			playerA->position.y < playerB->position.y + playerB->sprite()->size.y * playerB->scale.y &&
-// 			playerA->position.y + playerA->sprite()->size.y * playerA->scale.y > playerB->position.y);
-// }
+// Check collision between two Textures
+bool MyScene::collision(Entity* collisionA, Entity* collisionB) {
+    
+    bool collision = false;
 
+    // Check for collision
+
+    // The -15.0f adjustment on both the x-coordinates && y-coordinates(-5.0f) is specific to the dimensions of the .png image used for these entities.
+    // This adjustment is necessary because the image dimensions might not perfectly align with the entity's bounding box,
+    // especially if the image has transparent areas or if the bounding box is slightly larger than the visible part of the image.
+    // By subtracting 15.0f from the x-coordinates, we ensure that the collision detection logic accounts for this discrepancy.
+    return ((collisionA->position.x < (collisionB->position.x + collisionB->size().x - 15.0f) && 
+            (collisionA->position.x  + collisionA->size().x - 15.0f) > collisionB->position.x) &&
+            (collisionA->position.y < (collisionB->position.y + collisionB->size().y - 5.0f) && 
+            (collisionA->position.y + collisionA->size().y - 5.0f) > collisionB->position.y));
+
+    collision = true;
+
+    return collision;
+
+	// return (collisionA->position.x < collisionB->position.x + collisionB->size().x * collisionB->scale.x &&
+	// 		collisionA->position.x + collisionA->size().x * collisionA->scale.x > collisionB->position.x &&
+	// 		collisionA->position.y < collisionB->position.y + collisionB->size().y * collisionB->scale.y &&
+	// 		collisionA->position.y + collisionA->size().y * collisionA->scale.y > collisionB->position.y);
+
+
+}
+
+void MyScene::rotate(Entity* entityA, Entity* entityB, float deltaTime)
+{
+    // Define the center of the circle and the radius
+    Vector2 center = { entityA->position.x, entityA->position.y }; // Example center point
+    float radius = 50.0f; // Example radius
+
+    // Define the speed of the movement around entityA
+    float speed = 5.0f; // Example speed
+    
+    // Update the angle
+    angle += speed * deltaTime;
+
+    // Calculate the new position using the updated angle and the radius
+    entityB->position.x = center.x + radius * cos(angle);
+    entityB->position.y = center.y + radius * sin(angle);
+}
 // void MyScene::Zoom(float deltaTime)
 // {
 //     if (GetMouseWheelMove())

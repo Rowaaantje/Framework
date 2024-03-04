@@ -2,7 +2,7 @@
 #define CORE_H
 
 
-#include "scene.h"
+#include <scene.h>
 
 class Core
 {

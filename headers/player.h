@@ -31,11 +31,13 @@ public:
 	void clamp();
 
 protected:
-	Rectangle player;
-	Texture2D playerTexture;
-	Image player3;
-	
+	// Rectangle player;
+	// Texture2D playerTexture;
+	// Image player3;
+
 private:
+	Rectangle kaas;
+	Texture2D playerTexture;
 
 };
 

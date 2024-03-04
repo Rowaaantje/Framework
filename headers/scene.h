@@ -5,7 +5,7 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include "entity.h"
+#include <entity.h>
 #include <vector>
 #include <map>
 
@@ -20,13 +20,16 @@ class Scene : public Entity
 
     /// @brief draw the scene
 	/// @return void
-	void draw(float deltaTime);
+	void draw();
 
+	/// @brief Update the scene. This function is PURE VIRTUAL. You MUST implement it when extending from Scene.
+	/// @param deltaTime Time elapsed since last frame draw.
+	/// @return void
+	virtual void update(float deltaTime) = 0;
 	/// @brief update this Scene
 	/// @param deltaTime the number of seconds since the last update
 	/// @return void
-	virtual void updateScene(float deltaTime);
-
+	virtual void tick(float deltaTime);
 	/// @brief Wether the scene is active or not
 	bool isActive() { return !WindowShouldClose(); };
 
@@ -35,10 +38,11 @@ class Scene : public Entity
     Camera2D* getCamera() const;
 
 private:
-	/// @brief draw each entity from the list entities
+	/// @brief draw & Update each entity from the list entities
+	/// @param entity the Entity to update
+	/// @param deltaTime the number of seconds since the last update
 	/// @return void
-	void updateEntity(float deltaTime);
-
+	void updateEntity(Entity* child, float deltaTime);
 };
 
 #endif /* SCENE_H */

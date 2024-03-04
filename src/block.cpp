@@ -1,9 +1,11 @@
-#include "Block.h"
+#include <Block.h>
 
-Block::Block() : Entity(), block ({ position.x, position.y, scale.x, scale.y })
+Block::Block() : Entity()
 {
-    //constructor
-    // Rectangle block = { position.x, position.y, scale.x, scale.y };
+    this->addTexture("assets/sword1.png");
+    this->position.x = SCREEN_WIDTH / 2;
+    this->position.y = SCREEN_HEIGHT / 2;
+    this->setTextureColor(WHITE); 
 }   
 
 Block::~Block() 
@@ -13,14 +15,15 @@ Block::~Block()
 
 void Block::draw(float deltaTime) 
 {
-    DrawRectangleRec(block, RED); //draw Rectangle
+    // DrawRectangleRec(block, RED); //draw Rectangle
 }
 
 void Block::update(float deltaTime) 
 {
-    draw(deltaTime);
-    block.x = position.x;
-    block.y = position.y;
-    block.width = scale.x;
-    block.height = scale.y;
+    // draw(deltaTime);
+    
+    // block.x = position.x;
+    // block.y = position.y;
+    // block.width = scale.x;
+    // block.height = scale.y;
 }

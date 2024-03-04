@@ -3,64 +3,58 @@
 Player::Player() : Entity()
 // , player({ position.x, position.y, scale.x, scale.y })
 {
-    // Initialize the player rectangle here, using the initial position and scale from the Entity
-    player.x = this->position.x;
-    player.y = this->position.y;
-    player.width = this->scale.x;
-    player.height = this->scale.y;
+    synchronizeWithEntity();
+    this->addTexture("assets/player1.png");
+    this->position.x = SCREEN_WIDTH / 2;
+    this->position.y = SCREEN_HEIGHT / 2;
+    this->setTextureColor(WHITE);  
 
 	isMoving = false;
     sprintSpeed = 5.0f;
 	walkSpeed = 2.0f;
     momentum = 0.0f;
-
-    player3 = LoadImage("assets/player1.png");
-    playerTexture = LoadTextureFromImage(player3);
-    UnloadImage(player3);
-
-    if(playerTexture.id == 0){
-        // std::cout <<"Failed load texture"<< std::endl;
-        perror("Failed load texture");
-    }
-    else {
-        std::cout <<"succes with loading texture"<< std::endl;
-    }
-    
-    // Rectangle player = { position.x, position.y, scale.x, scale.y };
-    // camera.target = Vector2{ this->position.x , this->position.y  };
-    // camera.offset = Vector2{SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f };
-    // camera.rotation = 0.0f;
-    // camera.zoom = 1.0f;
 }   
 
 Player::~Player() 
-{
+{   
 	// deconstruct and delete the Tree
-    UnloadTexture(playerTexture);
+    // UnloadTexture(playerTexture);
 }
 
 void Player::draw(float deltaTime) 
 {
-    DrawRectangleRec(player, SEMI_TRANSPARENT_BLACK); 
-    DrawTexture(playerTexture, player.x, player.y, WHITE);
+    // Assuming you have a method to get the texture by name
 
+    // DrawRectangleRec(kaas, SEMI_TRANSPARENT_BLACK); 
+    // Vector2 center = { kaas.x + kaas.width / 2.0f, kaas.y + kaas.height / 2.0f };
+
+    // DrawRectanglePro(kaas, { kaas.x / playerTexture.width, kaas.y / playerTexture.height }, 0.0f,  SEMI_TRANSPARENT_BLACK);
+    
+    // Draw the texture centered within the rectangle
+    // DrawTexture(playerTexture, center.x - this->size().x / 2, center.y - this->size().y / 2, WHITE);
+
+    // Draw the texture centered within the rectangle
+    // DrawTexture(kaas, center.x - texture.width().x / 2, center.y - texture.height / 2, SEMI_TRANSPARENT_BLACK);
+    
+    // DrawTexture(playerTexture, player.x, player.y, WHITE);
 }
 
 void Player::synchronizeWithEntity()
 {
-    player.x = this->position.x;
-    player.y = this->position.y;
-    player.width = this->scale.x;
-    player.height = this->scale.y;
+    kaas.x = this->position.x;
+    kaas.y = this->position.y;
+    kaas.width = this->scale.x;
+    kaas.height = this->scale.y;
 }
 
 void Player::update(float deltaTime) 
 {
     Move(deltaTime);
-    synchronizeWithEntity();
     clamp();
-    std::cout << "x = " << this->position.x <<  " y = " << this->position.y << std::endl;
+    
+    synchronizeWithEntity();
     draw(deltaTime);
+    // std::cout << "x = " << this->position.x <<  " y = " << this->position.y << std::endl;
 }
 // simple linear interpolation function
 float Player::lerp(float start, float end, float factor) {
@@ -104,26 +98,26 @@ void Player::Move(float deltaTime)
     else if (IsKeyDown(KEY_S)) this->adjustPosition(deltaTime, 2);
     if (IsKeyDown(KEY_A)) this->adjustPosition(deltaTime, 3);
     else if (IsKeyDown(KEY_D)) this->adjustPosition(deltaTime, 4);
-
+    
 	// std::cout << "speed " << momentum << std::endl;
 }
 
 void Player::clamp()
 {
-  if ( this->position.x < 0)
+  if (this->position.x < 0)
   {
     this->position.x = 0;
   }
-  if ( this->position.y < 0)
+  if (this->position.y < 0)
   {
     this->position.y = 0;
   }
-  if ( this->position.x + this->scale.x > SCREEN_WIDTH)
+  if (this->position.x + this->size().x > SCREEN_WIDTH)
   {
-    this->position.x = SCREEN_WIDTH - this->scale.x;
+    this->position.x = SCREEN_WIDTH - this->size().x;
   }
-   if ( this->position.y + this->scale.y > SCREEN_WIDTH)
+  if (this->position.y + this->size().y > SCREEN_HEIGHT)
   {
-    this->position.y = SCREEN_WIDTH - this->scale.y;
+    this->position.y = SCREEN_HEIGHT - this->size().y;
   }
 }
