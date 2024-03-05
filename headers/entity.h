@@ -7,9 +7,13 @@
 #include <vector>
 #include <string>
 
-#include <cstdio>
 #include <iostream>
 #include <cmath>
+#include <cstdlib>
+
+//* rand example
+#include <cstdlib>	
+#include <time.h> 		
 
 class Entity 
 {
@@ -46,6 +50,10 @@ public:
 	/// @param c Color from an texture
 	/// @return void
 	void setTextureColor(Color c);
+	// draw actual image size of image
+	/// @return void
+	/// @param c Color from an texture
+    void drawImageSize(Color color);
 
 	void draw();
 	
@@ -64,10 +72,7 @@ public:
 	Vector2 size() { return Vector2{(float)_texture.width, (float)_texture.height}; };
 
 
-	// Method to draw the collision box for this entity
-	/// @return void
-	/// @param c Color from an texture
-    void drawImageSize(Color color, float deltaTime);
+	
 
 protected:
 	Vector2 _worldPosition;
@@ -80,8 +85,6 @@ private:
 	std::vector<Entity*> _children; ///< @brief The _children of this Entity
 	/// @brief _parent of an Entity
 	Entity* _parent; ///< @brief The _parent of this Entity
-
-	
 };
 
 #endif /* Entity_H */

@@ -7,13 +7,20 @@
 class Enemy: public Entity
 {
 public:
-	Enemy();
+	Enemy(Player* player);
 	virtual ~Enemy();
 
 	void update(float deltaTime);
 
+	float sTime;
+	float countdownTime;
+	
+	void randomPosition(float deltaTime);
+
 private:
 	/* add your private declarations */
+	Player* player;
+
 };
 
 #endif /* ENEMY_H */

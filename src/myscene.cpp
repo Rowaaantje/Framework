@@ -5,50 +5,71 @@
 MyScene::MyScene(uint16_t width, uint16_t height, const char* windowName) 
     : Scene(width, height, windowName)
 {   
+    iskeypressed = false;
     player = new Player();
-    enemy = new Enemy();
     block = new Block();
-    coli = new Block();
+    sword = new Block();
 
+	for (size_t i = 0; i < 4; i++)
+	{
+		enemies.push_back(new Enemy(player));
+		this->addChild(enemies[i]);
+	}
 
     // block->position = Vector3{600, 100};
     // player->position = Vector3{width / 2.0f, height / 2.0f};
     addChild(player);
-    addChild(enemy);
     addChild(block);
-    addChild(coli);
+    addChild(sword);
 }   
 
 MyScene::~MyScene() 
 {
     removeChild(player);
-    removeChild(enemy);
     removeChild(block);
-    removeChild(coli);
+    removeChild(sword);
+
+    // delete enemies;
+	for (size_t i = 0; i < enemies.size(); i++)
+	{
+		this->removeChild(enemies[i]);
+	}
 }
 
 void MyScene::update(float deltaTime) 
 {   
-    rotate(player, block, deltaTime);
-
-    if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
-        angle += 10.0f;
+    if(!iskeypressed)
+    {
+        DrawText("Pres SPACE to spawn enemies with rand pos", 190, 200, 20, SEMI_TRANSPARENT_BLACK);
     }
-    player->drawImageSize(SEMI_TRANSPARENT_BLACK, deltaTime);
+    
+    //randomly spawn the enemy at pos when button pres
+    randomEnemyPos(KEY_SPACE, deltaTime);
+    //rotate sword around player
+    rotateAround(player, sword, deltaTime);
+    //draw the real Image Size
+    this->sword->drawImageSize(SEMI_TRANSPARENT_BLACK);
 
-    // Check for collision and handle it
+    //for each enemy in list enemies[i]
+    for(size_t i = 0; i < enemies.size(); i++)
+    {
+        // Check for collision between sword and enemies
+        if (collision(sword, enemies[i])) {
+            this->enemies[i]->drawImageSize(RED);
+        } 
+
+        // Check for collision between player and enemies 
+        if (collision(player, enemies[i])) {
+            player->drawImageSize(RED);
+        } 
+    }
+    
     if (collision(player, block)) {
-        std::cout << "Colliding " << std::endl;
-    } 
-
-    if (collision(block, coli)) {
         // std::cout << "coli " << std::endl;
-        coli->setTextureColor(BLACK);
+        player->drawImageSize(RED);
     } 
-        
 }
 
-// Check collision between two Textures
 bool MyScene::collision(Entity* collisionA, Entity* collisionB) {
     
     bool collision = false;
@@ -65,6 +86,11 @@ bool MyScene::collision(Entity* collisionA, Entity* collisionB) {
             (collisionA->position.y + collisionA->size().y - 5.0f) > collisionB->position.y));
 
     collision = true;
+    if(collision) //if collision = true 
+    {
+        //print what we are colliding with
+        std::cout << "colliding : " << collisionA << collisionB << std::endl;
+    }
 
     return collision;
 
@@ -76,10 +102,10 @@ bool MyScene::collision(Entity* collisionA, Entity* collisionB) {
 
 }
 
-void MyScene::rotate(Entity* entityA, Entity* entityB, float deltaTime)
+void MyScene::rotateAround(Entity* pivot, Entity* rotating, float deltaTime)
 {
     // Define the center of the circle and the radius
-    Vector2 center = { entityA->position.x, entityA->position.y }; // Example center point
+    Vector2 center = { pivot->position.x, pivot->position.y }; // Example center point
     float radius = 50.0f; // Example radius
 
     // Define the speed of the movement around entityA
@@ -89,13 +115,18 @@ void MyScene::rotate(Entity* entityA, Entity* entityB, float deltaTime)
     angle += speed * deltaTime;
 
     // Calculate the new position using the updated angle and the radius
-    entityB->position.x = center.x + radius * cos(angle);
-    entityB->position.y = center.y + radius * sin(angle);
+    rotating->position.x = center.x + radius * cos(angle);
+    rotating->position.y = center.y + radius * sin(angle);
 }
-// void MyScene::Zoom(float deltaTime)
-// {
-//     if (GetMouseWheelMove())
-//     {
-//         playerCam->zoom += ((float)GetMouseWheelMove()*0.05f);
-//     }
-// }
+
+void MyScene::randomEnemyPos(int keycode, float deltaTime)
+{
+    for(size_t i = 0; i < enemies.size(); i++)
+    {
+        if(IsKeyDown(keycode))
+        {
+            enemies[i]->randomPosition(deltaTime);
+            iskeypressed = true;
+        }
+    }
+}

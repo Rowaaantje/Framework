@@ -39,7 +39,7 @@ void Scene::updateEntity(Entity* child, float deltaTime)
     }
 
     // Clear the background
-    ClearBackground(BLACK);
+    ClearBackground(GREEN);
     DrawFPS(25, 25);
 
     //draw all children 

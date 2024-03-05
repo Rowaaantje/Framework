@@ -57,7 +57,7 @@ void Entity::setTextureColor(Color c)
   this->_textureColor = c;
 }
 
-void Entity::drawImageSize(Color c, float deltaTime)
+void Entity::drawImageSize(Color c)
 {
     DrawRectangle(this->position.x, this->position.y, this->size().x, this->size().y, c);
 }
