@@ -111,7 +111,6 @@ void Player::animate(float deltaTime)
         }
       updateSourceRectangle();
     }
-    std::cout << playerTimer << std::endl;
 }
 
 void Player::updateSourceRectangle() 

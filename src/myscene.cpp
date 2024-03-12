@@ -14,7 +14,7 @@ MyScene::MyScene(uint16_t width, uint16_t height, const char* windowName)
     : Scene(width, height, windowName)
 {   
     player = new Player();
-    sword = new Block();
+    sword = new Sword();
 
     camera->offset = Vector2{ SCREEN_WIDTH/2.0f, SCREEN_HEIGHT/2.0f}; 
     camera->rotation = 0.0f;
@@ -22,7 +22,7 @@ MyScene::MyScene(uint16_t width, uint16_t height, const char* windowName)
 
     addChild(player);
     addChild(sword);
-    for (size_t i = 0; i < 4; i++)
+    for (size_t i = 0; i < 1; i++)
 	{
 		enemies.push_back(new Enemy(player));
 		this->addChild(enemies[i]);
@@ -81,41 +81,40 @@ void MyScene::update(float deltaTime)
 
 bool MyScene::collision(Entity* collisionA, Entity* collisionB) 
 {   
-    // Define a threshold for "almost in range"
+    // Define a threshold for "almost in range
     float rangeThreshold = 50.0f; 
 
     // Calculate the distance between collisionA and collisionB
-    float distanceX = collisionA->position.x - collisionB->position.x;
-    float distanceY = collisionA->position.y - collisionB->position.y;
+    float distanceX = collisionA->dest.x - collisionB->position.x;
+    float distanceY = collisionA->dest.y - collisionB->position.y;
     float distance = sqrt(distanceX * distanceX + distanceY * distanceY);
 
-    if(distance <= rangeThreshold)
-    {
-        // std::cout << " close " << std::endl;
-        bool collision = false;
+    std::cout << distance << std::endl;
 
-        // Check for collision
-        // The -15.0f adjustment on both the x-coordinates && y-coordinates(-5.0f) is specific to the dimensions of the .png image used for these entities.
-        // This adjustment is necessary because the image dimensions might not perfectly align with the entity's bounding box,
-        // especially if the image has transparent areas or if the bounding box is slightly larger than the visible part of the image.
-        // By subtracting 15.0f from the x-coordinates, we ensure that the collision detection logic accounts for this discrepancy.
-        return ((collisionA->position.x < (collisionB->position.x + collisionB->size().x - 15.0f) && 
-                (collisionA->position.x  + collisionA->size().x - 15.0f) > collisionB->position.x) &&
-                (collisionA->position.y < (collisionB->position.y + collisionB->size().y - 5.0f) && 
-                (collisionA->position.y + collisionA->size().y - 5.0f) > collisionB->position.y));
-
-        collision = true;
-        if(collision) 
-        {
-            //print what we are colliding with
-            std::cout << "colliding : " << collisionA << collisionB << std::endl;
-        }
-        return collision;
+    // If the entities are outside the range threshold, no need to check for collision
+    if(distance > rangeThreshold) {
+        return false;
     }
-    // return (collisionA->position.x < collisionB->position.x + collisionB->size().x * collisionB->scale.x &&
-    // 		collisionA->position.x + collisionA->size().x * collisionA->scale.x > collisionB->position.x &&
-    // 		collisionA->position.y < collisionB->position.y + collisionB->size().y * collisionB->scale.y &&
-    // 		collisionA->position.y + collisionA->size().y * collisionA->scale.y > collisionB->position.y);
+
+    std::cout << " checking for collision " << std::endl;
+
+    // If the entities are within the range threshold, perform detailed collision detection
+
+    // The -15.0f adjustment on both the x-coordinates && y-coordinates(-5.0f) is specific to the dimensions of the .png image used for these entities.
+    // This adjustment is necessary because the image dimensions might not perfectly align with the entity's bounding box,
+    // especially if the image has transparent areas or if the bounding box is slightly larger than the visible part of the image.
+    // By subtracting 15.0f from the x-coordinates, we ensure that the collision detection logic accounts for this discrepancy.
+    bool isColliding = ((collisionA->position.x < (collisionB->position.x + collisionB->size().x - 15.0f) && 
+                        (collisionA->position.x  + collisionA->size().x - 15.0f) > collisionB->position.x) &&
+                        (collisionA->position.y < (collisionB->position.y + collisionB->size().y - 5.0f) && 
+                        (collisionA->position.y + collisionA->size().y - 5.0f) > collisionB->position.y));
+
+    if(isColliding) {
+        //print what we are colliding with
+        std::cout << "colliding : " << collisionA << collisionB << std::endl;
+    }
+    
+    return isColliding;
 }
 
 void MyScene::rotateDest(Entity* pivotEntity, Entity* rotatingEntity, float deltaTime)
@@ -164,7 +163,7 @@ void MyScene::randomEnemyPos(int keycode, float deltaTime)
         if(IsKeyDown(keycode))
         {
             enemies[i]->randomPosition(deltaTime);
-            enemies[i]->setTextureColor(RED); 
+            enemies[i]->setTextureColor(WHITE); 
             iskeypressed = true;
         }
     }
@@ -194,11 +193,11 @@ void MyScene::updateCamera(float deltaTime)
     }
 
     //clamp the camera to an max zoom
-    if(camera->zoom < 3)
-    {
-        camera->zoom = 3;
-    } 
-    else if (camera->zoom > 10){
-        camera->zoom = 10;
-    }
+    // if(camera->zoom < 3)
+    // {
+    //     camera->zoom = 3;
+    // } 
+    // else if (camera->zoom > 10){
+    //     camera->zoom = 10;
+    // }
 }

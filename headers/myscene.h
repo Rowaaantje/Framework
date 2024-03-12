@@ -11,7 +11,7 @@
 #include <scene.h> // Header for the Scene class
 #include <player.h> // Header for the Player class
 #include <enemy.h> // Header for the Enemy class
-#include <block.h> // Header for the Block class
+#include <sword.h> // Header for the Block class
 
 //Class Definition: Your MyScene class inherits from a Scene
 /// @brief The MyScene class is the Scene implementation.
@@ -45,8 +45,7 @@ public:
 private:
  	// Pointers to game entities
 	Player* player;
-	Block* block;
-	Block* sword;
+	Sword* sword;
 	// Vector of pointers to Enemy entities
     std::vector<Enemy *> enemies; // Vector of enemies in the scene
      
