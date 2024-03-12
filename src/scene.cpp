@@ -3,9 +3,11 @@
 Scene::Scene(uint16_t width, uint16_t height, const char* windowName) : Entity() 
 {
 	std::cout << "################ new Scene ################" << std::endl;
+
+    camera = new Camera2D();
+    
     // Initialize the window for raylib
     InitWindow(width, height, windowName);
-    
 }
 
 Scene::~Scene()
@@ -21,9 +23,10 @@ void Scene::update(float deltaTime)
 void Scene::tick(float deltaTime)
 {
     BeginDrawing();
-        this->updateEntity(this, deltaTime);
-        this->update(deltaTime);
-        // draw();
+        BeginMode2D(*camera);    
+            this->updateEntity(this, deltaTime);
+            this->update(deltaTime);
+        EndMode2D();
     EndDrawing();
 }
 
@@ -45,6 +48,10 @@ void Scene::updateEntity(Entity* child, float deltaTime)
     //draw all children 
     for (Entity* child : this->children())
     {
-        DrawTexture(child->texture(), child->position.x, child->position.y, child->color());
+        // DrawTexture(child->texture(), child->position.x, child->position.y, child->color());
+        // DrawTexturePro(child->texture(), child->source(), child->dest(), child->origin(), 0, child->color());
+        
+        //newnewnewnewnewnewnewnewnewnewnewnewnewnewnewnewnewnewnewnewnewnewnewnew
+        child->renderSelect();
     }
 }

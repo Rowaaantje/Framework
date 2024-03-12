@@ -2,7 +2,6 @@
 
 Core::Core()
 {
-	_deltaTime = 0;
 }
 
 Core::~Core()
@@ -13,14 +12,14 @@ Core::~Core()
 void Core::run(Scene* scene)
 {
 	// update our _deltaTime
-	_calculateDeltaTime();
-
-	scene->tick(_deltaTime);
+	deltaTime = GetFrameTime();
+	// _calculateDeltaTime();
+	scene->tick(deltaTime);
 }
 
 float Core::_calculateDeltaTime()
 {
-	_deltaTime = GetFrameTime();
+	deltaTime = GetFrameTime();
 
-	return _deltaTime;
+	return deltaTime;
 }

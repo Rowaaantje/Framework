@@ -3,8 +3,8 @@
 Enemy::Enemy(Player* player) : Entity()
 {
 	this->addTexture("assets/player1.png");
-    this->setTextureColor(WHITE); 
-    this->player = player;
+    this->renderMethod = 0;
+    this->setTextureColor(INVINSIBLE); 
     /*cast the time_t value to an unsigned int before 
     passing it to srand. This ensures that the value is correctly converted*/
     srand(static_cast<unsigned int>(time(NULL)));
@@ -35,5 +35,3 @@ void Enemy::randomPosition(float deltaTime)
     }
     sTime = countdownTime;
 }
-
-

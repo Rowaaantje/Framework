@@ -32,7 +32,11 @@ public:
     // Angle variable used for rotation calculations
     float angle = 0.0f;
     // Method to rotate one entity around another entity
-    void rotateAround(Entity* entityA, Entity* entityB, float deltaTime);
+    void rotateDest(Entity* entityA, Entity* entityB, float deltaTime);
+    void rotatePosition(Entity* entityA, Entity* entityB, float deltaTime);
+
+
+    void updateCamera(float deltaTime);
 
     // Method to set a random position for enemies when a specific key is pressed
 	bool iskeypressed;
@@ -45,7 +49,7 @@ private:
 	Block* sword;
 	// Vector of pointers to Enemy entities
     std::vector<Enemy *> enemies; // Vector of enemies in the scene
-
+     
 };
 
 #endif /* SCENE00_H */

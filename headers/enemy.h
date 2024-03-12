@@ -14,7 +14,6 @@ public:
 
 	float sTime;
 	float countdownTime;
-	
 	void randomPosition(float deltaTime);
 
 private:

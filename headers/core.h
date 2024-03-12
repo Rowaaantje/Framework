@@ -1,3 +1,7 @@
+/*
+* Copyright 2024 Rowan Pijnaker
+*/
+
 #ifndef CORE_H
 #define CORE_H
 
@@ -10,16 +14,14 @@ public:
 	Core();
 	virtual ~Core();
 
+    /// @brief Runs the game loop for a given scene.
+    // 	This method starts the game loop, rendering the specified scene and updating the game state.
+	/// @param scene A pointer to the Scene object to be rendered.
 	void run(Scene* scene);
-
-	/// @brief get deltaTime
-	/// double internally, cast to float. glm and OpenGL expect floats.
-	/// @return float deltaTime
-	// float deltaTime() { return (float)_deltaTime; };
 
 private:
 	float _calculateDeltaTime();
-	float _deltaTime; ///< @brief deltaTime member
+	float deltaTime; ///< @brief deltaTime member
 
 };
 

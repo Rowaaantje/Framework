@@ -1,6 +1,7 @@
 /*
-* Copyright Rowan Pijnaker
+* Copyright 2024 Rowan Pijnaker
 */
+
 #ifndef CONFIG_H
 #define CONFIG_H
 
