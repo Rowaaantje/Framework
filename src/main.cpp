@@ -10,12 +10,10 @@ int main(void)
 
     SetWindowState(FLAG_VSYNC_HINT);
 
-
-
-        while (myscene->isActive())
-        {
-            core->run(myscene);
-        }
+    while (myscene->isActive())
+    {
+        core->run(myscene);
+    }
 
     // Cleanup
     delete myscene;

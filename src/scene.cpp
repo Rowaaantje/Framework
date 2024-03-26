@@ -32,6 +32,7 @@ void Scene::tick(float deltaTime)
 
 void Scene::draw()
 {
+    
 }
 
 void Scene::updateEntity(Entity* child, float deltaTime)  
@@ -50,8 +51,6 @@ void Scene::updateEntity(Entity* child, float deltaTime)
     {
         // DrawTexture(child->texture(), child->position.x, child->position.y, child->color());
         // DrawTexturePro(child->texture(), child->source(), child->dest(), child->origin(), 0, child->color());
-        
-        //newnewnewnewnewnewnewnewnewnewnewnewnewnewnewnewnewnewnewnewnewnewnewnew
         child->renderSelect();
     }
 }

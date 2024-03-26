@@ -1,11 +1,5 @@
 /*
-* @todo
-* - Use drawTexturePro instead of drawTexture for rendering(player, block).
-* - Fix collision detection due to the switch to drawTexturePro.
-* - Implemented two new methods for rotating entities around another entity
-* - one using drawTexture and the other drawTexturePro.
-*   - rotatePosition (drawTexture)
-*   - rotateDest(drawTexturePro)
+* todo find out how to properly delete an entity
 */
 
 #include <myscene.h>
@@ -13,22 +7,22 @@
 MyScene::MyScene(uint16_t width, uint16_t height, const char* windowName) 
     : Scene(width, height, windowName)
 {   
-    player = new Player();
-    sword = new Sword();
+    iskeypressed = false;
 
     camera->offset = Vector2{ SCREEN_WIDTH/2.0f, SCREEN_HEIGHT/2.0f}; 
     camera->rotation = 0.0f;
     camera->zoom = 0.3f;
 
+    player = new Player();
+    sword = new Sword();
+
     addChild(player);
     addChild(sword);
-    for (size_t i = 0; i < 1; i++)
-	{
-		enemies.push_back(new Enemy(player));
-		this->addChild(enemies[i]);
-	}
 
-    iskeypressed = false;
+    for (size_t i = 0; i < 1; i++){
+        enemies.push_back(new Enemy(player)); 
+        this->addChild(enemies[i]);
+    }
 }   
 
 MyScene::~MyScene() 
@@ -36,9 +30,9 @@ MyScene::~MyScene()
     removeChild(player);
     removeChild(sword);
     // delete enemies;
-	for (size_t i = 0; i < enemies.size(); i++)
+	for(Enemy* enemy : enemies)
 	{
-		this->removeChild(enemies[i]);
+		this->removeChild(enemy);
 	}
 }
 
@@ -48,116 +42,92 @@ void MyScene::update(float deltaTime)
     {
         DrawText("Pres SPACE to spawn enemies with rand pos", 190, 200, 20, SEMI_TRANSPARENT_BLACK);
     }
+
     updateCamera(deltaTime);
-    randomEnemyPos(KEY_SPACE, deltaTime);
 
-    //DEBUG //DEBUG //DEBUG //DEBUG //DEBUG //DEBUG //DEBUG
-    //DEBUG dest x,y
-    rotateDest(player, sword, deltaTime);
-    DrawCircle(player->dest.x, player->dest.y, 3.0f, YELLOW);
-    DrawCircle(sword->dest.x, sword->dest.y, 1.0f, RED);
-    //DEBUG position x,y
-    rotatePosition(player, sword, deltaTime);
-    DrawCircle(player->position.x, player->position.y, 3.0f, YELLOW);
-    DrawCircle(sword->position.x, sword->position.y, 1.0f, RED);
-    //DEBUG //DEBUG //DEBUG //DEBUG //DEBUG //DEBUG //DEBUG
-
-    //randomly spawn the enemy at pos when button pres
-
-    //for each enemy in list enemies[i]
-    for(size_t i = 0; i < enemies.size(); i++)
-    {
-        // Check for collision between sword and enemies
-        if (collision(sword, enemies[i])) {
-            this->enemies[i]->drawImageSize(RED);
-        } 
-
-        // Check for collision between player and enemies 
-        if (collision(player, enemies[i])) {
-            player->drawImageSize(RED);
-        } 
-    }
-}
-
-bool MyScene::collision(Entity* collisionA, Entity* collisionB) 
-{   
-    // Define a threshold for "almost in range
-    float rangeThreshold = 50.0f; 
-
-    // Calculate the distance between collisionA and collisionB
-    float distanceX = collisionA->dest.x - collisionB->position.x;
-    float distanceY = collisionA->dest.y - collisionB->position.y;
-    float distance = sqrt(distanceX * distanceX + distanceY * distanceY);
-
-    std::cout << distance << std::endl;
-
-    // If the entities are outside the range threshold, no need to check for collision
-    if(distance > rangeThreshold) {
-        return false;
-    }
-
-    std::cout << " checking for collision " << std::endl;
-
-    // If the entities are within the range threshold, perform detailed collision detection
-
-    // The -15.0f adjustment on both the x-coordinates && y-coordinates(-5.0f) is specific to the dimensions of the .png image used for these entities.
-    // This adjustment is necessary because the image dimensions might not perfectly align with the entity's bounding box,
-    // especially if the image has transparent areas or if the bounding box is slightly larger than the visible part of the image.
-    // By subtracting 15.0f from the x-coordinates, we ensure that the collision detection logic accounts for this discrepancy.
-    bool isColliding = ((collisionA->position.x < (collisionB->position.x + collisionB->size().x - 15.0f) && 
-                        (collisionA->position.x  + collisionA->size().x - 15.0f) > collisionB->position.x) &&
-                        (collisionA->position.y < (collisionB->position.y + collisionB->size().y - 5.0f) && 
-                        (collisionA->position.y + collisionA->size().y - 5.0f) > collisionB->position.y));
-
-    if(isColliding) {
-        //print what we are colliding with
-        std::cout << "colliding : " << collisionA << collisionB << std::endl;
-    }
+    spawner(deltaTime);
     
-    return isColliding;
+    //randomly spawn the enemy at pos when button pres
+    randomEnemyPos(KEY_SPACE, deltaTime);
+    rotate(player, sword, deltaTime);
+
+    //DEBUG //DEBUG //DEBUG //DEBUG //DEBUG //DEBUG //DEBUG
+    // DrawCircle(player->position.x, player->position.y, 3.0f, YELLOW);
+    // DrawCircle(sword->position.x, sword->position.y, 1.0f, RED);
+    
+    player->setTextureColor(WHITE);
+
+    
+    for(Enemy* enemy : enemies)
+    {   
+        enemy->setTextureColor(WHITE);
+        //wierd way to show where the eny died this is supose to represent blood
+         DrawCircle(enemy->position.x, enemy->position.y, 1.0f, RED);
+
+        // Check for collision between sword and enemies
+        if (collision(sword, enemy, false)) {
+            enemy->setTextureColor(RED);
+            removeChild(enemy);
+        }
+        // Check for collision between player and enemies 
+        if (collision(player, enemy, true)) {
+            player->setTextureColor(RED);
+        } 
+    }
 }
 
-void MyScene::rotateDest(Entity* pivotEntity, Entity* rotatingEntity, float deltaTime)
-{
-    // DrawTexture(sword->texture(), rotatingEntity->position.x, rotatingEntity->position.y, WHITE);
-    // // Define the center of the circle and the radius
-    // // Vector2 center = { pivot->position.x, pivot->position.y }; 
-    Vector2 center = {pivotEntity->dest.x, pivotEntity->dest.y};
-    float radius = 5.0f; 
-    float speed = 5.0f; 
-    // Update the angle
-    angle += speed * deltaTime;
+bool MyScene::collision(Entity* collisionA, Entity* collisionB, bool specific) 
+{   
+    float five  =  5.0f;
+    float four  =  4.0f;
+    float three =  3.0f;
+    float two   =  2.0f;
 
-    // // Calculate the new position using the updated angle and the radius
-    rotatingEntity->dest.x = center.x + radius * cos(angle);
-    rotatingEntity->dest.y = center.y + radius * sin(angle);
+    // Adjusts the size of the images to match the actual parts they represent.
+    // This is important for images with pixels that are not visible (transparent) or if the image's box is a bit bigger than the visible part of the image.
+    // By subtracting 4.0f from the x-coordinates, we make sure the collision detection works correctly.
+    // we do the same for y-coordinates
 
-    // std::cout << "Sword Position: (" << rotatingEntity->position.x << ", " << rotatingEntity->position.y << ")" << std::endl;
+    // The division by 4.0f adjustment is for a image(spriteSheets) that has multiple sprites.
+    // This is done to make sure that only the part of the image we care about is checked for collisions,
+    // especially when we have images that change sprites but we only want to check one sprite at a time.
+    // subtracting a value from a image that has transparent pixels, effectively making the collision detection area smaller & visually appealing.
+    if (specific) {
+        // If 'collision' is true, the method checks for collision considering the entity's size divided by 'four' and adjusted for transparent areas.
+        // Check if the left edge of collisionA is to the left of the right edge of collisionB
+        return ((collisionA->position.x < (collisionB->position.x + collisionB->size().x - 4.0f) && 
+                        // Check if the right edge of collisionA is to the right of the left edge of collisionB
+                        ((collisionA->position.x + collisionA->size().x / 4.0f) - 4.0f) > collisionB->position.x) &&
+                         // Check if the top edge of collisionA is above the bottom edge of collisionB
+                        (collisionA->position.y < (collisionB->position.y + collisionB->size().y - 3.0f) && 
+                        // Check if the bottom edge of collisionA is below the top edge of collisionB
+                        (collisionA->position.y + collisionA->size().y - 2.0f) > collisionB->position.y));
+    } else {
+        // If 'collision' is false, the method checks for collision without considering the entity's size divided by 'four'.
+        // This is used for entities where the entire sprite should be considered for collision.
+        return ((collisionA->position.x < (collisionB->position.x + collisionB->size().x - 4.0f) && 
+                (collisionA->position.x + collisionA->size().x - 6.0f) > collisionB->position.x) &&
+                (collisionA->position.y < (collisionB->position.y + collisionB->size().y) && 
+                (collisionA->position.y + collisionA->size().y ) > collisionB->position.y));
+    }
 }
 
-void MyScene::rotatePosition(Entity* pivotEntity, Entity* rotatingEntity, float deltaTime)
+void MyScene::rotate(Entity* pivotEntity, Entity* rotatingEntity, float deltaTime)
 {
-     // DrawTexture(sword->texture(), rotatingEntity->position.x, rotatingEntity->position.y, WHITE);
-    // // Define the center of the circle and the radius
-    // // Vector2 center = { pivot->position.x, pivot->position.y }; 
     Vector2 center = {pivotEntity->position.x, pivotEntity->position.y};
 
-    float radius = 5.0f; 
-    // Define the speed of the movement around entityA
-    float speed = 5.0f; 
-    
+    float radius = 15.0f; 
+    // Define the speed of the movement around pivotEntity
+    float speed = 10.0f; 
     // Update the angle
     angle += speed * deltaTime;
-
     // // Calculate the new position using the updated angle and the radius
     rotatingEntity->position.x = center.x + radius * cos(angle);
     rotatingEntity->position.y = center.y + radius * sin(angle);
-
-    // std::cout << "X " <<rotatingEntity->position.x  << "Y " <<rotatingEntity->position.y << std::endl;
 }
 
 void MyScene::randomEnemyPos(int keycode, float deltaTime)
-{
+{   
     for(size_t i = 0; i < enemies.size(); i++)
     {
         if(IsKeyDown(keycode))
@@ -169,10 +139,32 @@ void MyScene::randomEnemyPos(int keycode, float deltaTime)
     }
 }
 
+void MyScene::spawner(float deltaTime)
+{
+    // Check if the left mouse button is pressed
+    if (IsMouseButtonDown(MOUSE_LEFT_BUTTON) * deltaTime * 100) {
+
+        // Get the current mouse position
+        Vector2 mousePosition = GetMousePosition();
+        // Convert the mouse position from screen coordinates to world coordinates
+        Vector2 worldPosition = GetScreenToWorld2D(mousePosition, *camera);
+
+        // Create a new enemy at the mouse position
+        Enemy* newEnemy = new Enemy(player);
+        // Set the enemy's position to the mouse position with z=0
+        newEnemy->position = { worldPosition.x, worldPosition.y, 0.0f }; 
+        
+        // Add the new enemy to the scene
+        addChild(newEnemy);
+        newEnemy->setTextureColor(WHITE);
+        enemies.push_back(newEnemy); // Make sure to also add the new enemy to your enemies list :)
+    }
+}
+
 void MyScene::updateCamera(float deltaTime)
 {
     // Define the camera's target position based on the player's position
-    Vector2 targetPosition = {player->dest.x, player->dest.y};
+    Vector2 targetPosition = {player->position.x, player->position.y};
 
     // Define the camera's smoothing factor
     float smoothingFactor = 5.0f; // Adjust this value to change the camera's responsiveness
@@ -192,7 +184,7 @@ void MyScene::updateCamera(float deltaTime)
         camera->zoom  -= 0.5f;
     }
 
-    //clamp the camera to an max zoom
+    // // clamp the camera to an max zoom
     // if(camera->zoom < 3)
     // {
     //     camera->zoom = 3;

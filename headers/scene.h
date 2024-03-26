@@ -34,10 +34,6 @@ class Scene : public Entity
 	bool isActive() { return !WindowShouldClose(); };
 
 	Camera2D* camera;
-    Vector2 offset;         // Camera offset (displacement from target)
-    Vector2 target;         // Camera target (rotation and zoom origin)
-    float rotation;         // Camera rotation in degrees
-    float zoom;
 
 private:
 	/// @brief draw & Update each entity from the list entities
@@ -45,8 +41,6 @@ private:
 	/// @param deltaTime the number of seconds since the last update
 	/// @return void
 	void updateEntity(Entity* child, float deltaTime);
-
-
 };
 
 #endif /* SCENE_H */

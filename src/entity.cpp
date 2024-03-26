@@ -1,72 +1,95 @@
 #include <entity.h>
 
-Entity::Entity() 
-{
-    position = {0.0f, 0.0f, 0.0f};
-    rotation = {0.0f, 0.0f, 0.0f};
-    scale = {1.0f, 1.0f, 0.0f};
+int Entity::_nextGuid = 0;
 
-    source = {0, 0, 0, 0,};
-    dest = {0, 0, 0, 0,};
-    origin = {0, 0};
-}   
-
-Entity::~Entity() 
+Entity::Entity()
 {
-	removeTexture();
+  _guid = _nextGuid++;
+
+  _parent = nullptr;
+
+  position = {0.0f, 0.0f, 0.0f};
+  rotation = {0.0f, 0.0f, 0.0f};
+  scale = {1.0f, 1.0f, 1.0f};
 }
 
-void Entity::update(float deltaTime) 
+Entity::~Entity()
 {
-   
+  removeTexture();
 }
 
-void Entity::draw()
+void Entity::update(float deltaTime)
 {
-    
 }
 
-void Entity::addChild(Entity* child)
+void Entity::addChild(Entity *child)
 {
-    _children.push_back(child);
+  if (child->_parent != nullptr)
+  {
+    child->_parent->removeChild(child);
+  }
+
+  // Check if the child is already a child of this entity
+  for (Entity *existingChild : _children)
+  {
+    if (existingChild->_guid == child->_guid)
+    {
+      std::cout << "Child with GUID: " << child->_guid << " is already a child of this entity." << std::endl;
+      return;
+    }
+  }
+  // Set the current entity as the parent of the child.
+  child->_parent = this;
+  // Add the child to the list of children of the current entity
+  _children.push_back(child);
+  std::cout << "Added entity with GUID: " << child->_guid << std::endl;
 }
 
-void Entity::removeChild(Entity* child)
+void Entity::removeChild(Entity *child)
 {
-    delete child;
+
+  std::vector<Entity *>::iterator it = _children.begin();
+  while (it != _children.end())
+  { // Iterate through the list of children of the current entity.
+    if ((*it)->_guid == child->_guid)
+    {                           // Find the child by comparing their unique identifiers (_guid).
+      child->_parent = nullptr; // Disconnect the child from the current entity by setting its parent to nullptr.
+      it = _children.erase(it); // Remove the child from the list of children and update the iterator.
+      std::cout << "Removed child with GUID: " << child->_guid << std::endl;
+    }
+    else
+    {
+      ++it; // Move to the next child in the list.
+    }
+  }
 }
 
 void Entity::removeTexture()
 {
-    if(IsTextureReady(this->_texture))
+  if (IsTextureReady(this->_texture))
     UnloadTexture(this->_texture);
 }
 
 void Entity::addTexture(char *filePath)
 {
-    removeTexture();
-    if (IsPathFile(filePath))
-        this->_texture = LoadTexture(filePath);
+  removeTexture();
+  if (IsPathFile(filePath))
+    this->_texture = LoadTexture(filePath);
 
-    if(_texture.id == 0){ 
-        perror(" ########### Failed load texture ##########" ); 
-    }
+  if (_texture.id == 0)
+  {
+    perror(" ########### Failed loading texture ##########");
+  }
 }
 
-void Entity::renderSelect() 
+void Entity::renderSelect()
 {
-    switch (renderMethod)
-    {
-    case 1: 
-        // DrawTexturePro(this->texture(), this->source(), this->dest(), this->origin(), 0, this->color());
-        DrawTexturePro(this->texture(), this->source, this->dest, this->origin, 0, this->color());
-        // std::cout <<"DrawTexturePro"<<std::endl;
-        break;
-    default:
-        DrawTexture(this->texture(), this->position.x, this->position.y, this->color());
-        // std::cout << " ########### Failed load texture ##########" <<std::endl; 
-        break;
-    }
+  switch (renderMethod)
+  {
+  default:
+    DrawTexture(this->texture(), this->position.x, this->position.y, this->color());
+    break;
+  }
 }
 
 void Entity::setTextureColor(Color c)
@@ -76,7 +99,5 @@ void Entity::setTextureColor(Color c)
 
 void Entity::drawImageSize(Color c)
 {
-    DrawRectangle(this->position.x, this->position.y, this->size().x, this->size().y, c);
+  DrawRectangle(this->position.x, this->position.y, this->size().x, this->size().y, c);
 }
-
-

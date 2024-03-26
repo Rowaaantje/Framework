@@ -15,8 +15,7 @@
 #include <cmath>
 #include <cstdlib>
 
-
-//* rand example
+#include <algorithm>
 #include <cstdlib>	
 #include <time.h> 		
 
@@ -31,10 +30,6 @@ public:
     Vector3 position;
     Vector3 rotation;
     Vector3 scale;
-
-	Rectangle source;
-	Rectangle dest;
-	Vector2 origin;
 
 	/// @brief Update the entity.
 	/// @return void
@@ -62,9 +57,7 @@ public:
 	// draw actual image size of image
 	/// @return void
 	/// @param c Color from an texture
-    void drawImageSize(Color color);
-
-	void draw();
+    void drawImageSize(Color c);
 
 	/// @brief Getter for the children of an Entity
 	/// @return std::vector<Entity> of the children of an Entity
@@ -72,28 +65,17 @@ public:
 	/// @brief Getter for the parent of an Entity
 	/// @return Parent of an Entity
 	Entity *parent() { return _parent; };
-	// @brief Getter for the texture of an Entity
+	/// @brief Getter for the texture of an Entity
 	/// @return texture of an _texture
 	Texture2D texture() {return _texture; };
-	// @brief Getter for the texture of an Entity
-	/// @return texture of an _texture
+	/// @brief Getter for the _textureColor of an Entity
+	/// @return color of an _textureColor
 	Color color() { return _textureColor; };
 	Vector2 size() { return Vector2{(float)_texture.width, (float)_texture.height}; };
 
 	//select how you want to render your texture 
 	int renderMethod = 0;
-	void renderSelect(); 
-
-    //testing! 
-	// properties for drawing texture
-	// Rectangle rectangle() {return _rectangle; };
-	// Rectangle source() {return _source; };
-	// Rectangle dest() {return _dest; };
-	// Vector2 origin() {return _origin; };
-
-	// Rectangle _source;
-	// Rectangle _dest;
-	// Vector2 _origin;
+	virtual void renderSelect(); 
 
 protected:
 	Vector2 _worldPosition;
@@ -104,9 +86,15 @@ private:
 	Rectangle _rectangle;
 	Color _textureColor;
 	
+	// identity
+	int _guid; ///< @brief The _guid of this Entity
+	static int _nextGuid; ///< @brief The _nextGuid of this Entity
+	
+	// data structure
+	Entity* _parent; /// @brief _parent of an Entity
 	std::vector<Entity*> _children; ///< @brief The _children of this Entity
-	/// @brief _parent of an Entity
-	Entity* _parent; ///< @brief The _parent of this Entity
+
+	
 };
 
 #endif /* Entity_H */
