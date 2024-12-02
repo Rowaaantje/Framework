@@ -8,7 +8,7 @@
 
 Enemy::Enemy(Player* p1) : EntityAnimation()
 {
-	this->addTexture("assets/TEMP.png");
+	this->addTexture("assets/enemy.png");
     this->renderMethod = 1;
     this->setTextureColor(INVINSIBLE); 
     /*cast the time_t value to an unsigned int before 
