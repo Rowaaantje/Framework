@@ -11,6 +11,9 @@ Entity::Entity()
   position = {0.0f, 0.0f, 0.0f};
   rotation = {0.0f, 0.0f, 0.0f};
   scale = {1.0f, 1.0f, 1.0f};
+
+  _texture = {0};
+  _textureColor = WHITE;
 }
 
 Entity::~Entity()
@@ -28,7 +31,6 @@ void Entity::addChild(Entity *child)
   {
     child->_parent->removeChild(child);
   }
-
   // Check if the child is already a child of this entity
   for (Entity *existingChild : _children)
   {
@@ -47,18 +49,14 @@ void Entity::addChild(Entity *child)
 
 void Entity::removeChild(Entity *child)
 {
-
   std::vector<Entity *>::iterator it = _children.begin();
-  while (it != _children.end())
-  { // Iterate through the list of children of the current entity.
-    if ((*it)->_guid == child->_guid)
-    {                           // Find the child by comparing their unique identifiers (_guid).
-      child->_parent = nullptr; // Disconnect the child from the current entity by setting its parent to nullptr.
-      it = _children.erase(it); // Remove the child from the list of children and update the iterator.
-      std::cout << "Removed child with GUID: " << child->_guid << std::endl;
+  while (it != _children.end()) {           // Iterate through the list of children of the current entity.
+    if ((*it)->_guid == child->_guid) {     // Find the child by comparing their unique identifiers (_guid).
+      child->_parent = nullptr;             // Disconnect the child from the current entity by setting its parent to nullptr.
+      it = _children.erase(it);             // Remove the child from the list of children and update the iterator.
+      std::cout << "Successfully removed child with GUID: " << child->_guid << std::endl;
     }
-    else
-    {
+    else {
       ++it; // Move to the next child in the list.
     }
   }
